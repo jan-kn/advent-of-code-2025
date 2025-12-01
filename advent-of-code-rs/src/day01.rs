@@ -1,5 +1,6 @@
 use std::fs;
 
+#[allow(dead_code)]
 pub fn main() {
     let contents = fs::read_to_string("assets/input01.txt").unwrap();
 
@@ -14,10 +15,10 @@ pub fn main() {
 
     // PART 1
     // let result = rotations
-    //     .fold((start_pos, 0), |(pos, count), num| {
-    //         match (pos + num).rem_euclid(size) {
-    //             0 => (0, count + 1),
-    //             i => (i, count),
+    //     .fold((start_pos, 0), |(pos, n), rotation| {
+    //         match (pos + rotation).rem_euclid(size) {
+    //             0 => (0, n + 1),
+    //             i => (i, n),
     //         }
     //     })
     //     .1;
@@ -30,7 +31,7 @@ pub fn main() {
                 (pos + rotation).rem_euclid(size),
                 // old + num full rotations (div) + possible partial rotation (mod) over zero
                 n + (rotation / size).abs()
-                    + i64::from(pos != 0 && !(1..=99).contains(&(pos + (rotation % size)))),
+                    + i64::from(pos != 0 && !(1..size).contains(&(pos + (rotation % size)))),
             )
         })
         .1;
