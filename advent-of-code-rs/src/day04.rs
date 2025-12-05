@@ -23,8 +23,8 @@ pub fn main() {
                 if !grid[x][y] {
                     continue;
                 }
-                for dx in [-1isize, 0, 1] {
-                    for dy in [-1isize, 0, 1] {
+                for dx in -1isize..=1 {
+                    for dy in -1isize..=1 {
                         if (dx == 0 && dy == 0)
                             || !(0..nx).contains(&((x as isize + dx) as usize))
                             || !(0..ny).contains(&((y as isize + dy) as usize))
