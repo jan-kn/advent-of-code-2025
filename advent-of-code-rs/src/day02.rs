@@ -49,10 +49,9 @@ pub fn main() {
             // for n_splits in [2] {
             // part 2
             for n_splits in 2..=num_length(id) {
-                if length == 0 || length % n_splits != 0 {
+                if length % n_splits != 0 {
                     continue;
                 }
-
                 let mut splits = split_n_wise(id, n_splits);
                 let first = splits.next().unwrap();
                 if splits.all(|e| e == first) {
