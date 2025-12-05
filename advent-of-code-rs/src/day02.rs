@@ -1,3 +1,4 @@
+use rayon::prelude::*;
 use std::fs;
 
 /// Returns the base 10 length of a given integer.
@@ -36,31 +37,34 @@ mod tests {
 pub fn main() {
     let contents = fs::read_to_string("assets/input02.txt").unwrap();
 
-    let ranges = contents.trim().split(",").map(|l| {
-        let (lower, upper) = l.split_once('-').unwrap();
-        (lower.parse::<u64>().unwrap(), upper.parse::<u64>().unwrap())
-    });
+    let ranges = contents
+        .trim()
+        .split(",")
+        .map(|l| {
+            let (lower, upper) = l.split_once('-').unwrap();
+            (lower.parse::<u64>().unwrap(), upper.parse::<u64>().unwrap())
+        })
+        .collect::<Vec<_>>();
 
-    let mut result = 0;
-    for (lower, upper) in ranges {
-        'ids: for id in lower..=upper {
+    let result = ranges
+        .par_iter()
+        // .iter()
+        .flat_map(|&(lower, upper)| lower..=upper)
+        .filter(|&id| {
             let length = num_length(id);
             // part 1
-            // for n_splits in [2] {
+            // (2..=2)
             // part 2
-            for n_splits in 2..=num_length(id) {
+            (2..=length).any(|n_splits| {
                 if length % n_splits != 0 {
-                    continue;
+                    return false;
                 }
                 let mut splits = split_n_wise(id, n_splits);
                 let first = splits.next().unwrap();
-                if splits.all(|e| e == first) {
-                    result += id;
-                    continue 'ids;
-                }
-            }
-        }
-    }
+                splits.all(|e| e == first)
+            })
+        })
+        .sum::<u64>();
 
-    print!("{}", result)
+    println!("{}", result);
 }
