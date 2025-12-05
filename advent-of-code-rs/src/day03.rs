@@ -9,7 +9,7 @@ fn slice_to_base_10(bank: &[u8]) -> u64 {
         .sum()
 }
 
-// Removes digit `idx` in base 10.
+/// Removes digit at position `idx` in base 10.
 fn remove_digit(num: u64, idx: u32) -> u64 {
     let len = num.ilog10() + 1;
     let exp = 10u64.pow(len - 1 - idx);
@@ -88,9 +88,8 @@ pub fn main() {
     });
 
     // part 1
-    // let n = 2;
+    // let result: u64 = banks.map(|b| find_max_joltage(&b, 2)).sum();
     // part 2
-    let n = 12;
-    let result: u64 = banks.map(|b| find_max_joltage(&b, n)).sum();
+    let result: u64 = banks.map(|b| find_max_joltage(&b, 12)).sum();
     println!("{}", result);
 }
