@@ -1,3 +1,4 @@
+use rayon::prelude::*;
 use std::{collections::HashMap, fs};
 
 #[derive(Debug)]
@@ -27,11 +28,10 @@ pub fn main() {
         .collect();
 
     let mut distances: Vec<((usize, usize), f64)> = (0..boxes.len())
-        .map(|i| ((i + 1)..boxes.len()).map(move |j| (i, j)))
-        .flatten()
+        .flat_map(|i| ((i + 1)..boxes.len()).map(move |j| (i, j)))
         .map(|(i, j)| ((i, j), boxes[i].distance(&boxes[j])))
         .collect();
-    distances.sort_by(|(_, d_1), (_, d_2)| d_1.total_cmp(d_2));
+    distances.par_sort_by(|(_, d_1), (_, d_2)| d_1.total_cmp(d_2));
 
     let mut box_to_cluster: HashMap<usize, usize> = (0..boxes.len()).map(|i| (i, i)).collect();
     let mut last_connection = None;
